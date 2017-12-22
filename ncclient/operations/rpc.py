@@ -205,10 +205,11 @@ class RPCReplyListener(SessionListener): # internal use
 
     def callback(self, root, raw):
         tag, attrs = root
-        if not self._device_handler.perform_qualify_check():
-            return
-        else:
+        if self._device_handler.perform_qualify_check():
             if tag != qualify("rpc-reply"):
+                return
+        else:
+            if tag != "rpc-reply":
                 return
         for key in attrs: # in the <rpc-reply> attributes
             if key == "message-id": # if we found msgid attr
